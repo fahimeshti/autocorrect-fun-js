@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Autocorrect</title>
+    <style>
+        body {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: #333;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        textarea {
+            border: 1px solid #000;
+            background: #111;
+            color: #fff;
+            padding: 10px;
+            width: 250px;
+            height: 60px;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus {
+            border: 1px dashed crimson;
+        }
+
+        section>div {
+            position: fixed;
+            font-family: sans-serif;
+            top: 10vh;
+            right: 50px;
+            width: 30vw;
+            min-height: 30vh;
+            padding: 10px;
+            border: 1px solid #fff;
+        }
+
+        ul {
+            list-style-type: square;
+        }
+    </style>
+</head>
+
+<body>
+    <textarea id="textarea" row='50' col='500' class='card' placeholder="type here..."></textarea>
+    <section>
+        <div>
+            <strong>Dictionary:</strong>
+            <ul id="dictionary"></ul>
+        </div>
+    </section>
+    <script>
+        const corrections = {
+            "apol": "apple",
+            "realy": "really",
+            "wierd": "weird",
+        }
+        const dictionaryNode = document.getElementById('dictionary');
+        const dictionaryValueArray = Object.keys(corrections);
+
+        document.querySelector('textarea').addEventListener('input', function (event) {
+            let value = event.target.value
+            let allWords = value.split(" "); // ['an', 'appel']
+            let lastTypedWord = allWords[allWords.length - 1]; // getting the last word from the array, in our case its 'appel'
+            let currentTextLength = value.length; // getting the array length, in our case its 2
+            let wordToReplace = corrections[lastTypedWord];
+
+            let newValue;
+            if (corrections[lastTypedWord] !== undefined) { // checking if the word exists in our "corrections" array
+                newValue = value.slice(0, currentTextLength - lastTypedWord.length) + wordToReplace;
+                console.log(newValue);
+                document.getElementById('textarea').value = newValue;
+            }
+        });
+
+
+        dictionaryValueArray.map(value => {
+            const node = document.createElement("li");
+            const textnode = document.createTextNode(value);
+            node.appendChild(textnode);
+            dictionaryNode.appendChild(node)
+        })
+
+
+    </script>
+</body>
+
+</html>
